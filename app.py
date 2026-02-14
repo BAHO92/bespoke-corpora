@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 import config
-from server import corpus_service
+from server import collections, articles, threads
+from server.safety import is_safe_name
 
 app = Flask(__name__)
 
@@ -16,103 +17,76 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/corpus/')
-def corpus_index():
-    return render_template('corpus_index.html')
-
-
-@app.route('/corpus/<corpus_name>/')
-def corpus_view(corpus_name):
-    corpus_type = corpus_service.get_corpus_type(corpus_name)
-    if corpus_type == 'keyword':
-        return render_template('corpus_keyword.html', corpus_name=corpus_name)
-    elif corpus_type == 'threads':
-        return render_template('corpus_threads.html', corpus_name=corpus_name)
-    return jsonify({'error': 'unknown corpus type'}), 404
-
-
-@app.route('/db/<source>/<bundle>/')
-def db_bundle_view(source, bundle):
-    source_info = corpus_service.get_db_source_info(source)
-    if not source_info:
-        return jsonify({'error': 'unknown source'}), 404
-    return render_template('db_bundle.html', source=source, bundle=bundle,
-                           source_name=source_info['name'])
+@app.route('/c/<collection_id>/')
+def collection_view(collection_id):
+    if not is_safe_name(collection_id):
+        return jsonify({'error': 'invalid collection name'}), 400
+    ctype = collections.get_type(collection_id)
+    if ctype == 'articles':
+        return render_template('articles.html', collection_id=collection_id)
+    elif ctype == 'threads':
+        return render_template('threads.html', collection_id=collection_id)
+    return jsonify({'error': 'collection not found'}), 404
 
 
 @app.route('/api/collections')
 def api_collections():
-    return jsonify(corpus_service.discover_all())
+    return jsonify(collections.discover())
 
 
-@app.route('/api/corpus/corpora')
-def api_corpus_corpora():
-    return jsonify(corpus_service.discover_corpora())
-
-
-@app.route('/api/corpus/<corpus_name>/metadata')
-def api_corpus_metadata(corpus_name):
-    meta = corpus_service.get_corpus_metadata(corpus_name)
-    if not meta:
+@app.route('/api/c/<collection_id>/manifest')
+def api_manifest(collection_id):
+    manifest = collections.get_manifest(collection_id)
+    if not manifest:
         return jsonify({'error': 'not found'}), 404
-    return jsonify(meta)
+    return jsonify(manifest)
 
 
-@app.route('/api/corpus/<corpus_name>/articles')
-def api_corpus_articles(corpus_name):
+@app.route('/api/c/<collection_id>/articles')
+def api_articles(collection_id):
+    if not is_safe_name(collection_id):
+        return jsonify({'error': 'invalid name'}), 400
     page = int(request.args.get('page', 1))
     per_page = int(request.args.get('per_page', 50))
-    return jsonify(corpus_service.list_keyword_articles(corpus_name, page, per_page))
+    return jsonify(articles.list_articles(collection_id, page, per_page))
 
 
-@app.route('/api/corpus/<corpus_name>/articles/<article_id>')
-def api_corpus_article(corpus_name, article_id):
-    art = corpus_service.get_keyword_article(corpus_name, article_id)
+@app.route('/api/c/<collection_id>/articles/<path:article_id>')
+def api_article(collection_id, article_id):
+    if not is_safe_name(collection_id):
+        return jsonify({'error': 'invalid name'}), 400
+    art = articles.get_article(collection_id, article_id)
     if not art:
         return jsonify({'error': 'not found'}), 404
     return jsonify(art)
 
 
-@app.route('/api/corpus/<corpus_name>/segments')
-def api_corpus_segments(corpus_name):
-    return jsonify(corpus_service.get_thread_segments(corpus_name))
+@app.route('/api/c/<collection_id>/segments')
+def api_segments(collection_id):
+    if not is_safe_name(collection_id):
+        return jsonify({'error': 'invalid name'}), 400
+    return jsonify(threads.list_segments(collection_id))
 
 
-@app.route('/api/corpus/<corpus_name>/segments/<segment_id>')
-def api_corpus_segment(corpus_name, segment_id):
-    result = corpus_service.get_thread_segment_annotations(corpus_name, segment_id)
+@app.route('/api/c/<collection_id>/segments/<segment_id>')
+def api_segment(collection_id, segment_id):
+    if not is_safe_name(collection_id):
+        return jsonify({'error': 'invalid name'}), 400
+    result = threads.get_segment(collection_id, segment_id)
     if not result:
         return jsonify({'error': 'not found'}), 404
     return jsonify(result)
 
 
-@app.route('/api/corpus/<corpus_name>/annotations/<annotation_id>')
-def api_corpus_annotation(corpus_name, annotation_id):
-    ann = corpus_service.get_thread_annotation(corpus_name, annotation_id)
+@app.route('/api/c/<collection_id>/annotations/<annotation_id>')
+def api_annotation(collection_id, annotation_id):
+    if not is_safe_name(collection_id):
+        return jsonify({'error': 'invalid name'}), 400
+    ann = threads.get_annotation(collection_id, annotation_id)
     if not ann:
         return jsonify({'error': 'not found'}), 404
     return jsonify(ann)
 
 
-@app.route('/api/db/sources')
-def api_db_sources():
-    return jsonify(corpus_service.discover_db_sources())
-
-
-@app.route('/api/db/<source>/<bundle>/articles')
-def api_db_articles(source, bundle):
-    page = int(request.args.get('page', 1))
-    per_page = int(request.args.get('per_page', 50))
-    return jsonify(corpus_service.list_db_articles(source, bundle, page, per_page))
-
-
-@app.route('/api/db/<source>/<bundle>/articles/<path:article_id>')
-def api_db_article(source, bundle, article_id):
-    art = corpus_service.get_db_article(source, bundle, article_id)
-    if not art:
-        return jsonify({'error': 'not found'}), 404
-    return jsonify(art)
-
-
 if __name__ == '__main__':
-    app.run(host=config.HOST, port=config.VAULT_PORT, debug=True)
+    app.run(host=config.HOST, port=config.PORT, debug=True)

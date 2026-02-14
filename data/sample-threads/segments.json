@@ -1,0 +1,18 @@
+{
+    "segments": [
+        {
+            "id": "seg-001",
+            "label": "子曰學而時習之",
+            "ref_text": "子曰：「學而時習之，不亦說乎？」",
+            "ref_record": "ann-jizhu-001",
+            "mapped_records": ["ann-jizhu-001", "ann-jijie-001"]
+        },
+        {
+            "id": "seg-002",
+            "label": "有朋自遠方來",
+            "ref_text": "有朋自遠方來，不亦樂乎？",
+            "ref_record": "ann-jizhu-002",
+            "mapped_records": ["ann-jizhu-002"]
+        }
+    ]
+}

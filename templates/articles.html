@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BESPOKE CORPORA — {{ source_name }}</title>
+    <title>Bespoke Corpora</title>
     <link rel="stylesheet" href="/static/css/main.css?v={{ v }}">
     <link rel="stylesheet" href="/static/css/corpus.css?v={{ v }}">
 </head>
 <body class="page-reader">
     <header class="bespoke-header">
         <nav class="bespoke-breadcrumb">
-            <a href="/">BESPOKE</a>
+            <a href="/">Bespoke</a>
             <span>›</span>
-            <span>{{ source_name }}</span>
-            <span>›</span>
-            <span id="corpus-title">{{ bundle }}</span>
+            <span id="corpus-title">{{ collection_id }}</span>
         </nav>
     </header>
     <main id="bespoke-main"></main>
-    <script>const API_BASE = "/api/db/{{ source }}/{{ bundle }}";</script>
+    <script>const API_BASE = "/api/c/{{ collection_id }}";</script>
     <script src="/static/js/api.js?v={{ v }}"></script>
     <script src="/static/js/corpus-keyword.js?v={{ v }}"></script>
 </body>

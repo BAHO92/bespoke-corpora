@@ -1,2 +1,0 @@
-{"id": "sample-001", "source": "example", "metadata": {"title": "첫 번째 예시 기사", "date": {"year": "2024", "month": "1", "day": "1"}}, "original": {"paragraphs": ["原文第一段落。", "原文第二段落。"]}, "translation": {"paragraphs": ["번역 첫 번째 단락.", "번역 두 번째 단락."]}, "has_translation": true}
-{"id": "sample-002", "source": "example", "metadata": {"title": "두 번째 예시 기사"}, "original": {"paragraphs": ["只有原文的記事。"]}, "has_translation": false}

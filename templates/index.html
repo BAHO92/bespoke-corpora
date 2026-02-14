@@ -3,57 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BESPOKE CORPORA</title>
+    <title>Bespoke Corpora</title>
     <link rel="stylesheet" href="/static/css/main.css?v={{ v }}">
     <link rel="stylesheet" href="/static/css/corpus.css?v={{ v }}">
 </head>
 <body>
     <header style="padding: 24px 20px 16px; border-bottom: 1px solid var(--border);">
-        <h1 style="font-size: 1.4em; color: var(--accent-bright); margin: 0;">BESPOKE CORPORA</h1>
+        <h1 style="font-size: 1.4em; color: var(--accent-bright); margin: 0;">Bespoke Corpora</h1>
     </header>
     <main style="padding: 20px; max-width: 960px;" id="collections">
-        <p style="color: var(--text-muted);">로딩 중...</p>
+        <p style="color: var(--text-muted);">Loading...</p>
     </main>
     <script src="/static/js/api.js?v={{ v }}"></script>
     <script>
     (async () => {
         const data = await API.get('/api/collections');
         const el = document.getElementById('collections');
-        let html = '';
 
-        if (data.corpora && data.corpora.length) {
-            html += '<section class="collection-section">';
-            html += '<h2 class="section-title">CORPUS</h2>';
-            html += '<div class="card-grid">';
-            data.corpora.forEach(c => {
-                html += `<a href="/corpus/${encodeURIComponent(c.name)}/" class="corpus-card">
-                    <span class="corpus-type-badge ${c.type}">${c.type}</span>
-                    <h3>${c.display_name || c.name}</h3>
-                    <p class="corpus-count">${c.record_count.toLocaleString()}건</p>
-                </a>`;
-            });
-            html += '</div></section>';
+        if (!data.length) {
+            el.innerHTML = '<p style="color: var(--text-muted);">No collections found. Add data to the <code>data/</code> directory.</p>';
+            return;
         }
 
-        if (data.db_sources) {
-            data.db_sources.forEach(src => {
-                html += '<section class="collection-section">';
-                html += `<h2 class="section-title">${src.display_name} <span class="section-count">${src.total_articles.toLocaleString()}건</span></h2>`;
-                html += '<div class="card-grid">';
-                src.bundles.forEach(b => {
-                    html += `<a href="/db/${encodeURIComponent(src.source)}/${encodeURIComponent(b.name)}/" class="corpus-card db-card">
-                        <h3>${b.name}</h3>
-                        <p class="corpus-count">${b.article_count.toLocaleString()}건</p>
-                    </a>`;
-                });
-                html += '</div></section>';
-            });
-        }
-
-        if (!html) {
-            html = '<p style="color: var(--text-muted);">열람 가능한 데이터가 없습니다.</p>';
-        }
-
+        let html = '<div class="card-grid">';
+        data.forEach(c => {
+            html += `<a href="/c/${encodeURIComponent(c.id)}/" class="corpus-card">
+                <span class="corpus-type-badge ${c.type}">${c.type}</span>
+                <h3>${c.title || c.id}</h3>
+                ${c.description ? '<p class="corpus-desc">' + c.description + '</p>' : ''}
+                <p class="corpus-count">${c.record_count.toLocaleString()} records</p>
+            </a>`;
+        });
+        html += '</div>';
         el.innerHTML = html;
     })();
     </script>

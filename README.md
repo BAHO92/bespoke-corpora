@@ -1,157 +1,160 @@
 # Bespoke Corpora
 
-JSONL/JSON 사료 컬렉션을 브라우저에서 열람하는 경량 로컬 웹앱.
+A local-first Flask web app for researchers to browse their own corpora (JSON/JSONL) in the browser.
 
-원문/번역 병렬 뷰, 주석 스레드 뷰, 페이지네이션, 메타데이터 표시를 지원한다. DB import 없이 JSON 파일을 직접 읽어서 동기화 걱정이 없다.
+Read original text and translations side-by-side, scan metadata, and explore **threads** — where multiple commentators annotate the same canonical text. Intentionally simple and hackable: meant to be forked and reshaped per project.
+
+## What This Does
+
+- Browse article collections with original/translation parallel view
+- Explore commentary threads (canonical text + multiple annotator cards)
+- Auto-discover collections from a flat `data/` directory
+- Paginate large collections, display metadata
+- Cache in memory by file mtime — no database, no sync
+
+## What This Does NOT Do
+
+- Crawl or scrape sources (bring your own data)
+- Full-text search or indexing
+- Multi-user authentication or hosting
+- Annotation or editing workflows
+- Version control for your data
 
 ## Quick Start
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/bespoke-corpora.git
+git clone https://github.com/BAHO92/bespoke-corpora.git
 cd bespoke-corpora
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python app.py
+python3 app.py
 # → http://127.0.0.1:5222
 ```
 
-`data/` 폴더에 샘플 데이터가 들어 있어서 바로 확인할 수 있다.
+Sample data is included — you'll see it immediately.
 
-## 데이터 넣기
+## Data Format
 
-`data/` 아래 두 종류의 데이터를 넣을 수 있다:
+All collections live in `data/`. Each collection is a directory with a `manifest.json`.
 
-### 1. Corpus (`data/corpus/`)
+### Articles Collection
 
-자체 구축한 코퍼스. 두 가지 타입이 있다:
-
-#### Keyword 타입
-
-키워드 검색 결과 등 기사 목록 형태.
+A flat list of articles with original text and optional translation.
 
 ```
-data/corpus/my-corpus/
-├── metadata.json
-└── source-a/
-    └── articles.jsonl      ← 한 줄에 기사 하나
+data/my-collection/
+├── manifest.json
+└── articles.jsonl
 ```
 
-**metadata.json:**
+**manifest.json:**
 ```json
 {
-    "keyword": "my-keyword",
-    "keyword_kr": "내 키워드",
-    "total_articles": 100
+    "type": "articles",
+    "title": "My Collection"
 }
 ```
 
-**articles.jsonl** (각 줄):
+**articles.jsonl** — one article per line:
 ```json
 {
     "id": "unique-id",
-    "source": "source-name",
-    "metadata": {
-        "title": "기사 제목",
-        "date": {"year": "1800", "month": "3", "day": "15"}
-    },
-    "original": {
-        "paragraphs": ["원문 첫 단락", "원문 둘째 단락"]
-    },
-    "translation": {
-        "paragraphs": ["번역 첫 단락", "번역 둘째 단락"]
-    },
+    "metadata": { "title": "Article Title", "date": {"year": "1800"} },
+    "original": { "paragraphs": ["First paragraph", "Second paragraph"] },
+    "translation": { "paragraphs": ["번역 첫 단락", "번역 둘째 단락"] },
     "has_translation": true
 }
 ```
 
-#### Threads 타입
+**Flexible input:** `original` and `translation` accept either `{"paragraphs": [...]}` or a plain string (auto-split by `\n`).
 
-경전 주석처럼 원문 세그먼트에 여러 주석이 달리는 구조.
+You can also use `articles.json` (JSON array) instead of JSONL.
+
+### Threads Collection
+
+Canonical text segments with multiple commentator annotations — for modeling commentary traditions.
 
 ```
-data/corpus/my-commentary/
-├── metadata.json
-├── canonical_segments.json
+data/my-commentary/
+├── manifest.json
+├── segments.json
 └── annotations.jsonl
 ```
 
-**canonical_segments.json:**
+**manifest.json:**
+```json
+{
+    "type": "threads",
+    "title": "My Commentary Corpus"
+}
+```
+
+**segments.json:**
 ```json
 {
     "segments": [
         {
             "id": "seg-001",
-            "label": "세그먼트 라벨",
-            "jizhu_ref_text": "원문 텍스트",
-            "jizhu_record": "ann-001",
+            "label": "Short label for sidebar",
+            "ref_text": "Canonical text being commented on",
+            "ref_record": "ann-001",
             "mapped_records": ["ann-001", "ann-002"]
         }
     ]
 }
 ```
 
-**annotations.jsonl** (각 줄):
+**annotations.jsonl** — one annotation per line:
 ```json
 {
     "id": "ann-001",
-    "commentator": "著者名",
-    "commentator_name": "저자명",
-    "era": "時代",
+    "commentator": "Author Name (original script)",
+    "commentator_name": "Author Name (display)",
+    "era": "Dynasty/Period",
     "life_years": "1130-1200",
     "commentary_type": "注",
-    "source": "출전",
-    "text": "주석 원문",
-    "translation_ko": "주석 번역"
+    "source": "Source text title",
+    "text": "Commentary text",
+    "translation_ko": "Translation of commentary"
 }
 ```
 
-### 2. DB (`data/db/`)
+## Configuration
 
-크롤링한 원자료. 소스 > 번들 > articles.json 구조.
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `BESPOKE_DATA_DIR` | `./data` | Data root path |
+| `BESPOKE_HOST` | `127.0.0.1` | Server host |
+| `BESPOKE_PORT` | `5222` | Server port |
 
-```
-data/db/
-├── MySource/
-│   ├── metadata.json        ← optional: {"display_name": "표시 이름"}
-│   └── bundle-name/
-│       └── articles.json    ← JSON 배열
-```
-
-**articles.json:**
-```json
-[
-    {
-        "id": "article-001",
-        "title": "기사 제목",
-        "original": "원문 텍스트\n두 번째 단락",
-        "translation": "번역 텍스트\n두 번째 단락",
-        "date": {"year": "1800"},
-        "source": {"collection": "컬렉션명"},
-        "url": "https://원본-URL"
-    }
-]
-```
-
-## 설정
-
-환경변수로 커스터마이징 가능:
-
-| 변수 | 기본값 | 설명 |
-|------|--------|------|
-| `BESPOKE_DATA_DIR` | `./data` | 데이터 루트 경로 |
-| `BESPOKE_HOST` | `127.0.0.1` | 서버 호스트 |
-| `BESPOKE_PORT` | `5222` | 서버 포트 |
-
-예시: 다른 위치의 데이터를 쓰고 싶으면
 ```bash
-BESPOKE_DATA_DIR=/path/to/my/data python app.py
+BESPOKE_DATA_DIR=/path/to/my/data python3 app.py
 ```
 
-## 기술 스택
+## Project Structure
 
-- **Backend**: Flask, Python 3.10+
-- **Frontend**: Vanilla JS, CSS
-- **Data**: JSON/JSONL 직접 읽기 (DB 없음, mtime 캐시)
+```
+app.py              ← Flask routes
+config.py           ← Configuration (env vars)
+server/
+├── collections.py  ← Auto-discover collections from manifest.json
+├── articles.py     ← Article list/detail with pagination
+├── threads.py      ← Segments + annotations
+├── loader.py       ← JSONL/JSON loading + article normalization
+├── cache.py        ← mtime-based in-memory cache
+└── safety.py       ← Path traversal prevention
+templates/          ← Jinja2 HTML templates
+static/             ← CSS + JS (vanilla, no build step)
+data/               ← Your collections go here
+tests/              ← pytest tests
+```
+
+## Tech Stack
+
+- **Backend**: Flask 3.x, Python 3.10+
+- **Frontend**: Vanilla JS, CSS (no build step, no framework)
+- **Data**: JSON/JSONL direct file reads, mtime cache
+- **Dependencies**: `flask`, `python-frontmatter`
 
 ## License
 
