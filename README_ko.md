@@ -24,17 +24,22 @@
 
 ## 빠른 시작
 
+터미널을 열고 아래 세 줄을 한꺼번에 붙여넣으세요:
+
 ```bash
 git clone https://github.com/BAHO92/bespoke-corpora.git
 cd bespoke-corpora
 bash run.sh
-# → http://127.0.0.1:5222
 ```
+
+`run.sh`가 알아서 Python 가상환경과 의존성을 설치하고 서버를 실행합니다. 터미널에 `http://127.0.0.1:5222`가 뜨면 브라우저에서 열어주세요.
 
 샘플 데이터가 포함되어 있어 바로 확인할 수 있습니다.
 
+> **Claude Code 사용자라면?** 위 세 줄을 실행한 뒤 같은 터미널에서 `claude`를 입력하세요. "실행해줘"라고 하면 Claude가 `CLAUDE.md`를 읽고 알아서 처리합니다.
+
 <details>
-<summary>직접 설치</summary>
+<summary>직접 설치 (단계별로 하고 싶다면)</summary>
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate

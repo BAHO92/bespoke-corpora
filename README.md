@@ -24,17 +24,22 @@ Read original text and translations side-by-side, scan metadata, and explore **t
 
 ## Quick Start
 
+Open Terminal and paste all three lines at once:
+
 ```bash
 git clone https://github.com/BAHO92/bespoke-corpora.git
 cd bespoke-corpora
 bash run.sh
-# → http://127.0.0.1:5222
 ```
+
+`run.sh` sets up everything automatically (Python virtual environment, dependencies) and starts the server. When you see `http://127.0.0.1:5222` in the terminal, open that URL in your browser.
 
 Sample data is included — you'll see it immediately.
 
+> **Using Claude Code?** Run `claude` inside the `bespoke-corpora` folder and say "실행해줘". Claude reads `CLAUDE.md` and handles the rest.
+
 <details>
-<summary>Manual setup</summary>
+<summary>Manual setup (if you prefer step-by-step)</summary>
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
