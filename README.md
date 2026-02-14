@@ -32,9 +32,21 @@ cd bespoke-corpora
 bash run.sh
 ```
 
-`run.sh` sets up everything automatically (Python virtual environment, dependencies) and starts the server. When you see `http://127.0.0.1:5222` in the terminal, open that URL in your browser.
+`run.sh` sets up everything automatically (Python virtual environment, dependencies), opens the browser, and starts the server.
 
 Sample data is included — you'll see it immediately.
+
+### Run it again later
+
+After the first install, just type `bash run.sh` in the `bespoke-corpora` folder.
+
+Want a shortcut? Add this line to your `~/.zshrc` (or `~/.bashrc`):
+
+```bash
+alias bespoke='bash ~/bespoke-corpora/run.sh'
+```
+
+Then restart Terminal. From now on, just type `bespoke` anywhere.
 
 > **Using Claude Code?** Run `claude` inside the `bespoke-corpora` folder and say "run bespoke-corpora". Claude reads `CLAUDE.md` and handles the rest.
 

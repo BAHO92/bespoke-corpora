@@ -43,4 +43,11 @@ echo -e "${GREEN}Starting Bespoke Corpora...${NC}"
 echo "http://127.0.0.1:5222"
 echo ""
 
+# Open browser (macOS: open, Linux: xdg-open)
+if command -v open &> /dev/null; then
+    open "http://127.0.0.1:5222" &
+elif command -v xdg-open &> /dev/null; then
+    xdg-open "http://127.0.0.1:5222" &
+fi
+
 python3 app.py

@@ -32,9 +32,21 @@ cd bespoke-corpora
 bash run.sh
 ```
 
-`run.sh`가 알아서 Python 가상환경과 의존성을 설치하고 서버를 실행합니다. 터미널에 `http://127.0.0.1:5222`가 뜨면 브라우저에서 열어주세요.
+`run.sh`가 알아서 Python 가상환경과 의존성을 설치하고, 브라우저를 열고, 서버를 실행합니다.
 
 샘플 데이터가 포함되어 있어 바로 확인할 수 있습니다.
+
+### 다음부터 실행할 때
+
+설치 이후에는 `bespoke-corpora` 폴더에서 `bash run.sh`만 입력하면 됩니다.
+
+더 간단하게 하려면? `~/.zshrc` (또는 `~/.bashrc`)에 아래 한 줄을 추가하세요:
+
+```bash
+alias bespoke='bash ~/bespoke-corpora/run.sh'
+```
+
+터미널을 재시작하면 어디서든 `bespoke`만 입력하면 실행됩니다.
 
 > **Claude Code 사용자라면?** 위 세 줄을 실행한 뒤 같은 터미널에서 `claude`를 입력하세요. "실행해줘"라고 하면 Claude가 `CLAUDE.md`를 읽고 알아서 처리합니다.
 
