@@ -1,0 +1,11 @@
+{
+    "segments": [
+        {
+            "id": "seg-001",
+            "label": "子曰學而時習之",
+            "jizhu_ref_text": "子曰：「學而時習之，不亦說乎？」",
+            "jizhu_record": "ann-001",
+            "mapped_records": ["ann-001", "ann-002"]
+        }
+    ]
+}

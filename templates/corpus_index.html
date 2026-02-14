@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BESPOKE CORPORA</title>
+    <link rel="stylesheet" href="/static/css/main.css?v={{ v }}">
+    <link rel="stylesheet" href="/static/css/corpus.css?v={{ v }}">
+</head>
+<body>
+    <header style="padding: 20px; border-bottom: 1px solid var(--border);">
+        <a href="/" style="color: var(--text-muted); text-decoration: none; font-size: 13px;">← 전체 목록</a>
+        <h1 style="margin-top: 8px; font-size: 1.4em; color: var(--accent-bright);">CORPUS</h1>
+    </header>
+    <main style="padding: 20px;" id="corpus-list">
+        <p style="color: var(--text-muted);">로딩 중...</p>
+    </main>
+    <script src="/static/js/api.js?v={{ v }}"></script>
+    <script>
+    (async () => {
+        const corpora = await API.get('/api/corpus/corpora');
+        const container = document.getElementById('corpus-list');
+        if (!corpora.length) {
+            container.innerHTML = '<p style="color: var(--text-muted);">코퍼스가 없습니다.</p>';
+            return;
+        }
+        container.innerHTML = corpora.map(c => `
+            <a href="/corpus/${encodeURIComponent(c.name)}/" class="corpus-card">
+                <span class="corpus-type-badge ${c.type}">${c.type}</span>
+                <h2>${c.display_name || c.name}</h2>
+                <p class="corpus-count">${c.record_count.toLocaleString()}건</p>
+            </a>
+        `).join('');
+    })();
+    </script>
+</body>
+</html>

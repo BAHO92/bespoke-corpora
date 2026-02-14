@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BESPOKE CORPORA — Threads</title>
+    <link rel="stylesheet" href="/static/css/main.css?v={{ v }}">
+    <link rel="stylesheet" href="/static/css/corpus.css?v={{ v }}">
+</head>
+<body class="page-reader">
+    <header class="bespoke-header">
+        <nav class="bespoke-breadcrumb">
+            <a href="/">BESPOKE</a>
+            <span>›</span>
+            <span id="corpus-title">{{ corpus_name }}</span>
+        </nav>
+    </header>
+    <div class="threads-layout">
+        <aside class="threads-sidebar" id="segment-index"></aside>
+        <main class="threads-content" id="threads-main"></main>
+    </div>
+    <script>const API_BASE = "/api/corpus/{{ corpus_name }}";</script>
+    <script src="/static/js/api.js?v={{ v }}"></script>
+    <script src="/static/js/corpus-threads.js?v={{ v }}"></script>
+</body>
+</html>
