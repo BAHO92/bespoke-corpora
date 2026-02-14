@@ -27,13 +27,22 @@
 ```bash
 git clone https://github.com/BAHO92/bespoke-corpora.git
 cd bespoke-corpora
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python3 app.py
+bash run.sh
 # → http://127.0.0.1:5222
 ```
 
 샘플 데이터가 포함되어 있어 바로 확인할 수 있습니다.
+
+<details>
+<summary>직접 설치</summary>
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python3 app.py
+```
+
+</details>
 
 ## 데이터 포맷
 

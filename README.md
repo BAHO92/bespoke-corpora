@@ -27,13 +27,22 @@ Read original text and translations side-by-side, scan metadata, and explore **t
 ```bash
 git clone https://github.com/BAHO92/bespoke-corpora.git
 cd bespoke-corpora
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python3 app.py
+bash run.sh
 # → http://127.0.0.1:5222
 ```
 
 Sample data is included — you'll see it immediately.
+
+<details>
+<summary>Manual setup</summary>
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python3 app.py
+```
+
+</details>
 
 ## Data Format
 
