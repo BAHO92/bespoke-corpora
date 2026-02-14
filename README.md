@@ -1,5 +1,7 @@
 # Bespoke Corpora
 
+**English** | [한국어](README_ko.md)
+
 A local-first Flask web app for researchers to browse their own corpora (JSON/JSONL) in the browser.
 
 Read original text and translations side-by-side, scan metadata, and explore **threads** — where multiple commentators annotate the same canonical text. Intentionally simple and hackable: meant to be forked and reshaped per project.
