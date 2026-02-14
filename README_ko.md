@@ -24,7 +24,23 @@
 
 ## 빠른 시작
 
-터미널을 열고 아래 세 줄을 한꺼번에 붙여넣으세요:
+### Claude Code로 설치 + 실행 (가장 쉬움)
+
+1. 터미널을 열고 `claude`를 실행하세요.
+2. Claude에게 이렇게 요청하세요:
+
+```
+https://github.com/BAHO92/bespoke-corpora.git 클론하고, 폴더로 들어가서 bash run.sh로 실행해줘
+```
+
+`run.sh`가 Python 환경 설치, 의존성 설치, 서버 실행, 브라우저 열기를 자동으로 처리합니다. 샘플 데이터가 포함되어 있어 바로 화면을 확인할 수 있습니다.
+
+종료하려면 터미널에서 `Ctrl+C`를 누르세요.
+
+<details>
+<summary>Claude 없이 직접 실행</summary>
+
+터미널에 아래 세 줄을 한꺼번에 붙여넣으세요:
 
 ```bash
 git clone https://github.com/BAHO92/bespoke-corpora.git
@@ -32,32 +48,26 @@ cd bespoke-corpora
 bash run.sh
 ```
 
-`run.sh`가 알아서 Python 가상환경과 의존성을 설치하고, 브라우저를 열고, 서버를 실행합니다.
-
-샘플 데이터가 포함되어 있어 바로 확인할 수 있습니다.
+</details>
 
 ### 다음부터 실행할 때
 
-설치 이후에는 `bespoke-corpora` 폴더에서 `bash run.sh`만 입력하면 됩니다.
+`bespoke-corpora` 폴더에서:
 
-더 간단하게 하려면? `~/.zshrc` (또는 `~/.bashrc`)에 아래 한 줄을 추가하세요:
+```bash
+bash run.sh
+```
+
+<details>
+<summary>(선택) 어디서든 bespoke 한 마디로 실행하기</summary>
+
+`~/.zshrc` (또는 `~/.bashrc`)에 추가:
 
 ```bash
 alias bespoke='bash ~/bespoke-corpora/run.sh'
 ```
 
-터미널을 재시작하면 어디서든 `bespoke`만 입력하면 실행됩니다.
-
-> **Claude Code 사용자라면?** 위 세 줄을 실행한 뒤 같은 터미널에서 `claude`를 입력하세요. "실행해줘"라고 하면 Claude가 `CLAUDE.md`를 읽고 알아서 처리합니다.
-
-<details>
-<summary>직접 설치 (단계별로 하고 싶다면)</summary>
-
-```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python3 app.py
-```
+터미널을 재시작한 뒤 `bespoke`만 입력하면 실행됩니다.
 
 </details>
 

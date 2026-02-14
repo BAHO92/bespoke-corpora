@@ -24,7 +24,23 @@ Read original text and translations side-by-side, scan metadata, and explore **t
 
 ## Quick Start
 
-Open Terminal and paste all three lines at once:
+### Install + run with Claude Code (easiest)
+
+1. Open a terminal and run `claude`.
+2. Tell Claude:
+
+```
+Clone https://github.com/BAHO92/bespoke-corpora.git, cd into it, then run bash run.sh
+```
+
+`run.sh` creates a Python environment, installs dependencies, starts the server, and opens your browser. Sample data is included, so you can verify it immediately.
+
+To stop the app, press `Ctrl+C` in the terminal.
+
+<details>
+<summary>Run it yourself (no Claude Code)</summary>
+
+Paste all three lines into Terminal at once:
 
 ```bash
 git clone https://github.com/BAHO92/bespoke-corpora.git
@@ -32,32 +48,26 @@ cd bespoke-corpora
 bash run.sh
 ```
 
-`run.sh` sets up everything automatically (Python virtual environment, dependencies), opens the browser, and starts the server.
+</details>
 
-Sample data is included — you'll see it immediately.
+### Next time you run it
 
-### Run it again later
+From the `bespoke-corpora` folder:
 
-After the first install, just type `bash run.sh` in the `bespoke-corpora` folder.
+```bash
+bash run.sh
+```
 
-Want a shortcut? Add this line to your `~/.zshrc` (or `~/.bashrc`):
+<details>
+<summary>(Optional) Run it from anywhere with a shortcut</summary>
+
+Add to `~/.zshrc` (or `~/.bashrc`):
 
 ```bash
 alias bespoke='bash ~/bespoke-corpora/run.sh'
 ```
 
-Then restart Terminal. From now on, just type `bespoke` anywhere.
-
-> **Using Claude Code?** Run `claude` inside the `bespoke-corpora` folder and say "run bespoke-corpora". Claude reads `CLAUDE.md` and handles the rest.
-
-<details>
-<summary>Manual setup (if you prefer step-by-step)</summary>
-
-```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python3 app.py
-```
+Restart your terminal, then just type `bespoke`.
 
 </details>
 
