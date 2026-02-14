@@ -154,7 +154,7 @@ tests/              ← pytest tests
 - **Backend**: Flask 3.x, Python 3.10+
 - **Frontend**: Vanilla JS, CSS (no build step, no framework)
 - **Data**: JSON/JSONL direct file reads, mtime cache
-- **Dependencies**: `flask`, `python-frontmatter`
+- **Dependencies**: `flask`
 
 ## License
 

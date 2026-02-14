@@ -77,7 +77,7 @@
 
         var refText = document.createElement('div');
         refText.className = 'segment-ref-text';
-        refText.textContent = segment.jizhu_ref_text || segment.label || '';
+        refText.textContent = segment.ref_text || segment.label || '';
 
         header.append(badge, refText);
 
