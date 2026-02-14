@@ -36,7 +36,7 @@ bash run.sh
 
 Sample data is included — you'll see it immediately.
 
-> **Using Claude Code?** Run `claude` inside the `bespoke-corpora` folder and say "실행해줘". Claude reads `CLAUDE.md` and handles the rest.
+> **Using Claude Code?** Run `claude` inside the `bespoke-corpora` folder and say "run bespoke-corpora". Claude reads `CLAUDE.md` and handles the rest.
 
 <details>
 <summary>Manual setup (if you prefer step-by-step)</summary>
